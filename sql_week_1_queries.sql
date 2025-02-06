@@ -1,25 +1,25 @@
 
-SELECT * FROM COMMANDE ;
+SELECT * FROM COMMANDE;
 
 --
 
-SELECT * FROM COMMANDE limit 1 ;
+SELECT * FROM COMMANDE LIMIT 1;
 
 --
 
-SELECT DISTINCT datecom FROM COMMANDE ;
+SELECT DISTINCT datecom FROM COMMANDE;
 
 --
 
-Select nom
-From CLIENT
-Where localite = 'Toulouse' ;
+SELECT nom
+FROM CLIENT
+WHERE localite = 'Toulouse';
 
 --
 
 SELECT id_commande
 FROM DETAIL
-WHERE QCOM > 20 AND QCOM < 100 ; 
+WHERE QCOM > 20 AND QCOM < 100; 
 
 --
 
@@ -31,19 +31,19 @@ WHERE QCOM > 20 OR QCOM < 100;
 
 SELECT id_produit
 FROM PRODUIT
-WHERE QSTOCK IS NULL ;
+WHERE QSTOCK IS NULL;
 
 --
 
-Select nom
-From CLIENT
-Where localite in ('Toulouse','Lyon'); 
+SELECT nom
+FROM CLIENT
+WHERE localite IN ('Toulouse','Lyon'); 
 
 --
 
-Select NOM
-From CLIENT
-Where localite in ('Toulouse','Lille','Bruxelles'); 
+SELECT NOM
+FROM CLIENT
+WHERE localite IN ('Toulouse','Lille','Bruxelles'); 
 
 --
 
@@ -53,15 +53,15 @@ WHERE QCOM BETWEEN 20 AND 100;
 
 --
 
-Select id_produit
-From PRODUIT
-Where DESCRIPTION_PRODUIT LIKE '%brosse%'; 
+SELECT id_produit
+FROM PRODUIT
+WHERE DESCRIPTION_PRODUIT LIKE '%brosse%'; 
 
 --
 
-Select id_produit
-From PRODUIT
-Where DESCRIPTION_PRODUIT LIKE '%UBrush%'; 
+SELECT id_produit
+FROM PRODUIT
+WHERE DESCRIPTION_PRODUIT LIKE '%UBrush%'; 
 
 --
 
@@ -71,82 +71,82 @@ ORDER BY QCOM DESC;
 
 -- 
 
-Select id_client , NOM , SOLDE
+SELECT id_client , NOM , SOLDE
 FROM CLIENT
-ORDER BY NOM , SOLDE DESC
+ORDER BY NOM , SOLDE DESC;
 
 --
 
-Select id_client , NOM , SOLDE
+SELECT id_client , NOM , SOLDE
 FROM CLIENT
-ORDER BY 2 , 3 DESC
+ORDER BY 2 , 3 DESC;
 
 --
 
 SELECT count(*),localite
 FROM CLIENT
-GROUP BY localite 
+GROUP BY localite;
 
 --
-SELECT avg(PRIX) as prix_moyen
+SELECT avg(PRIX) AS prix_moyen
 FROM PRODUIT
 ORDER BY prix_moyen DESC;
 
 --
 
-SELECT avg(PRIX) as prix_moyen
+SELECT avg(PRIX) AS prix_moyen
 FROM PRODUIT p
 ORDER BY prix_moyen DESC;
 
 --
 
-SELECT sum(solde) as Solde_total, LOCALITE 
+SELECT sum(solde) AS Solde_total, LOCALITE 
 FROM CLIENT
 GROUP BY LOCALITE
-ORDER By Solde_total ASC ;
+ORDER By Solde_total ASC;
 
 --
 
-SELECT sum(QCOM) as Total_quantity, id_produit
+SELECT sum(QCOM) AS Total_quantity, id_produit
 FROM DETAIL
 GROUP BY id_produit
-ORDER By Total_quantity DESC ;
+ORDER By Total_quantity DESC;
 
 --
 
-SELECT sum(QCOM) as Total_quantity, id_produit
+SELECT sum(QCOM) AS Total_quantity, id_produit
 FROM DETAIL
 GROUP BY id_produit
 HAVING Total_quantity > 100
-ORDER By Total_quantity DESC ;
+ORDER By Total_quantity DESC;
 
 -- 
 
 SELECT COUNT(*) AS total , localite
 FROM CLIENT 
 GROUP BY localite 
-HAVING total BETWEEN 3 AND 5
+HAVING total BETWEEN 3 AND 5;
 
 --
 
 SELECT localite, SUM(solde) AS solde_par_localite
 FROM CLIENT
 GROUP BY localite 
-HAVING solde_par_localite < 0
+HAVING solde_par_localite < 0;
 
 --
 
-select   p.qstock , d.qcom  
-from DETAIL d
-inner join PRODUIT p
-	on d.id_produit = p.id_produit
+SELECT p.qstock, d.qcom  
+FROM DETAIL d
+INNER JOIN PRODUIT p
+	ON d.id_produit = p.id_produit;
 
 --
 
-select  p.DESCRIPTION_PRODUIT, p.qstock - d.qcom   as stock_residuel
-from DETAIL d
-inner join PRODUIT p
-	on d.id_produit = p.id_produit
+SELECT  p.DESCRIPTION_PRODUIT, p.qstock - d.qcom  AS stock_residuel
+FROM DETAIL d
+INNER JOIN PRODUIT p
+	on d.id_produit = p.id_produit;
 	
 --
 
@@ -155,3 +155,35 @@ FROM DETAIL D
 INNER JOIN PRODUIT P
     ON D.id_produit = P.id_produit 
 WHERE P.description_produit like 'Brosse%';
+
+--
+
+-- Question : Afficher le nombre de commandes passées par chaque client, trié par ordre décroissant du nombre de commandes.
+SELECT id_client, COUNT(id_commande) AS nombre_commandes
+FROM COMMANDE
+GROUP BY id_client
+ORDER BY nombre_commandes DESC;
+
+-- Question : Lister les clients ayant un solde négatif inférieur à -2000 unités, en les triant du plus endetté au moins endetté.
+SELECT id_client, NOM, SOLDE
+FROM CLIENT
+WHERE SOLDE < -2000
+ORDER BY SOLDE ASC;
+
+-- Question : Afficher les produits dont la quantité en stock est inférieure à la quantité moyenne en stock de tous les produits.
+SELECT id_produit, DESCRIPTION_PRODUIT, QSTOCK
+FROM PRODUIT
+WHERE QSTOCK < (SELECT AVG(QSTOCK) FROM PRODUIT);
+
+-- Question : Afficher le nombre total de produits achetés pour chaque commande, en ne gardant que celles où plus de 50 articles ont été commandés.
+SELECT id_commande, SUM(QCOM) AS total_produits
+FROM DETAIL
+GROUP BY id_commande
+HAVING SUM(QCOM) > 50
+ORDER BY total_produits DESC;
+
+-- Question : Afficher les 3 produits les plus chers de la base de données.
+SELECT id_produit, DESCRIPTION_PRODUIT, PRIX
+FROM PRODUIT
+ORDER BY PRIX DESC
+LIMIT 3;
