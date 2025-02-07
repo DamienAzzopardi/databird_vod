@@ -179,7 +179,7 @@ WHERE QSTOCK < (SELECT AVG(QSTOCK) FROM PRODUIT);
 SELECT id_commande, SUM(QCOM) AS total_produits
 FROM DETAIL
 GROUP BY id_commande
-HAVING SUM(QCOM) > 50
+HAVING total_produits > 50
 ORDER BY total_produits DESC;
 
 -- Question : Afficher les 3 produits les plus chers de la base de données.
