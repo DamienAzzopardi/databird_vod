@@ -159,31 +159,44 @@ WHERE P.description_produit like 'Brosse%';
 --
 
 -- Question : Afficher le nombre de commandes passées par chaque client, trié par ordre décroissant du nombre de commandes.
-SELECT id_client, COUNT(id_commande) AS nombre_commandes
+SELECT 
+	id_client, 
+	COUNT(id_commande) AS nombre_commandes
 FROM COMMANDE
 GROUP BY id_client
 ORDER BY nombre_commandes DESC;
 
 -- Question : Lister les clients ayant un solde négatif inférieur à -2000 unités, en les triant du plus endetté au moins endetté.
-SELECT id_client, NOM, SOLDE
+SELECT 
+	id_client, 
+	nom,
+	solde
 FROM CLIENT
-WHERE SOLDE < -2000
-ORDER BY SOLDE ASC;
+WHERE solde < -2000
+ORDER BY solde ASC;
 
 -- Question : Afficher les produits dont la quantité en stock est inférieure à la quantité moyenne en stock de tous les produits.
-SELECT id_produit, DESCRIPTION_PRODUIT, QSTOCK
+SELECT 
+	id_produit, 
+	description_produit,
+	qstock
 FROM PRODUIT
-WHERE QSTOCK < (SELECT AVG(QSTOCK) FROM PRODUIT);
+WHERE qstock < (SELECT AVG(qstock) FROM PRODUIT);
 
 -- Question : Afficher le nombre total de produits achetés pour chaque commande, en ne gardant que celles où plus de 50 articles ont été commandés.
-SELECT id_commande, SUM(QCOM) AS total_produits
+SELECT 
+	id_commande, 
+	SUM(qcom) AS total_produits
 FROM DETAIL
 GROUP BY id_commande
 HAVING total_produits > 50
 ORDER BY total_produits DESC;
 
 -- Question : Afficher les 3 produits les plus chers de la base de données.
-SELECT id_produit, DESCRIPTION_PRODUIT, PRIX
+SELECT 
+	id_produit, 
+	description_produit,
+	prix
 FROM PRODUIT
-ORDER BY PRIX DESC
+ORDER BY prix DESC
 LIMIT 3;
