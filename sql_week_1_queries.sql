@@ -156,7 +156,7 @@ INNER JOIN PRODUIT P
     ON D.id_produit = P.id_produit 
 WHERE P.description_produit like 'Brosse%';
 
---
+--------------------------------------------------------------------------------------------------------------------------------------------
 
 -- Question : Afficher le nombre de commandes passées par chaque client, trié par ordre décroissant du nombre de commandes.
 SELECT 
