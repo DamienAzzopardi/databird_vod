@@ -147,3 +147,84 @@ where exists (select *
 
 --------------------------------------------------------------------------------------------------------------------------------------------
 
+-- Question : Afficher la liste des villes avec le nombre de trajets (y compris celles sans trajet)
+SELECT 
+    c.city_name, 
+    COUNT(r.ride_id) AS nombre_trajets
+FROM cities c
+LEFT JOIN rides r 
+    ON c.city_id = r.starting_city_id
+GROUP BY c.city_name
+ORDER BY nombre_trajets DESC;
+
+-- Question : Afficher la liste des membres ayant donné ou reçu une note (sans doublons)
+SELECT DISTINCT 
+    rating_giver_id AS member_id 
+FROM ratings
+UNION -- UNION supprime les doublons
+SELECT DISTINCT 
+    rating_receiver_id 
+FROM ratings;
+
+-- Question : Afficher la liste des membres ayant donné ou reçu une note (avec doublons)
+SELECT 
+    rating_giver_id AS member_id 
+FROM ratings
+UNION ALL -- UNION ALL garde les doublons
+SELECT 
+    rating_receiver_id 
+FROM ratings;
+
+-- Question : Afficher le nombre total de trajets et de demandes de réservation, l'un sous l'autre
+SELECT 
+    'Trajets' AS type, 
+    COUNT(*) AS total 
+FROM rides
+UNION ALL
+SELECT 
+    'Demandes' AS type, 
+    COUNT(*) 
+FROM requests;
+
+-- Question : Afficher la liste des membres avec leur nombre de notes reçues (y compris ceux sans notes)
+SELECT 
+    m.member_id, 
+    m.first_name, 
+    m.last_name, 
+    (SELECT COUNT(*) 
+     FROM ratings r 
+     WHERE r.rating_receiver_id = m.member_id) AS nombre_notes
+FROM members m;
+
+-- Question : Afficher la liste des membres ayant reçu plus de 2 notes
+SELECT 
+    m.member_id, 
+    m.first_name, 
+    m.last_name
+FROM members m
+WHERE (SELECT COUNT(*) 
+       FROM ratings r 
+       WHERE r.rating_receiver_id = m.member_id) > 2;
+
+-- Question : Afficher la liste des membres avec leur note moyenne reçue (y compris ceux sans notes)
+SELECT  
+    m.member_id,  
+    m.first_name,  
+    m.last_name,  
+    (SELECT AVG(r.grades)  
+     FROM ratings r  
+     WHERE r.rating_receiver_id = m.member_id) AS note_moyenne  
+FROM members m; 
+
+-- Question : Afficher la liste des membres ayant une note moyenne strictement supérieure à 4
+SELECT  
+    m.member_id,  
+    m.first_name,  
+    m.last_name,
+    (SELECT AVG(r.grades)  
+     FROM ratings r  
+     WHERE r.rating_receiver_id = m.member_id) AS note_moyenne
+FROM members m  
+WHERE (SELECT AVG(r.grades)  
+       FROM ratings r  
+       WHERE r.rating_receiver_id = m.member_id) > 4;
