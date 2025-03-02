@@ -469,8 +469,8 @@ FROM total_places t
 JOIN cities c 
 	ON t.starting_city_id = c.city_id;
 
--- Question : Afficher les villes ayant proposé plus de 50 trajets
--- On filtre les villes ayant organisé plus de 50 trajets en utilisant un CTE.
+-- Question : Afficher les villes ayant proposé plus de 80 trajets
+-- On filtre les villes ayant organisé plus de 80 trajets en utilisant un CTE.
 
 WITH trajets_villes AS (
     SELECT 
