@@ -1,0 +1,68 @@
+[Tableau – Semaine 1] Exercice : Coffee Sales Dashboard (30 min)
+
+Dataset utilisé : vod_tableau__database_1_coffe_sales.csv
+
+Objectif :
+Créer vos premiers graphiques dans Tableau en vous appuyant sur le dataset Coffee Sales.
+Les questions couvrent les notions de la semaine 1 : interface, premiers graphiques, calculs, granularité, filtres, séries temporelles.
+
+=========
+EXERCICES
+=========
+
+1. Importer les données (3 min)
+   - Importez le fichier CSV dans Tableau.
+   - Vérifiez la présence des colonnes suivantes :
+     Date, Time, coffee_name, money, cash_type, hour_of_day, Time_of_Day, Weekday, Month_name.
+
+2. Ventes par type de café (5 min)
+   Objectif : créer un premier bar chart simple.
+   - Placez coffee_name sur Colonnes.
+   - Placez SUM(money) sur Lignes.
+   - Triez du café le plus vendu au moins vendu.
+   - Affichez les labels de valeur.
+
+   Question :
+   -> Quels sont les 3 types de cafés qui génèrent le plus de revenus ?
+
+   Tableau avancé :
+    - Créez un champ calculé qui identifie automatiquement le top 3 des cafés les plus vendus afin de les afficher dans une couleur différente.
+
+     calc_top_3_money = IF RANK(SUM([Money])) <= 3 THEN "Top 3" ELSE "Others" END
+
+3. Champ calculé “Estimated Profit” (5 min)
+   Hypothèse pédagogique : le coût d’un café = 60 % du montant payé.
+   Créez un champ calculé :
+
+     calc_estimated_profit = [money] * 0.40
+
+   - Créez une vue montrant SUM(Estimated Profit) par coffee_name et Time_of_Day.
+
+   Question :
+   -> Quelle boisson dégage la marge estimée la plus élevée, et à quelle période de la journée ?
+
+4. Série temporelle (évolution dans le temps) (7 min)
+   - Placez Date dans Colonnes.
+   - Passez le niveau de date à : Mois.
+   - Placez SUM(money) sur Lignes.
+   - Ajoutez Time_of_Day sur Couleur.
+
+   Questions :
+   -> Observe-t-on une tendance claire dans les ventes quotidiennes ?
+   -> Quel moment de la journée (Morning / Afternoon / Evening) rapporte le plus en février 2025?
+
+5. Filtre sur une boisson spécifique (5 min)
+   - Faites glisser coffee_name dans Filtres.
+   - Affichez le filtre (quick filter).
+   - Sélectionnez uniquement “Latte”.
+   - Observez la série temporelle filtrée.
+
+   Question :
+   -> Le Latte suit-il la même évolution temporelle que les ventes globales ?
+
+6. (Optionnel) Mini dashboard (5 min)
+   Assemblez dans un dashboard :
+   - Le bar chart par café,
+   - La série temporelle,
+   - La vue profit estimé,
+   - Le filtre coffee_name.
